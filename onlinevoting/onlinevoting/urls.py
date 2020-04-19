@@ -28,6 +28,7 @@ urlpatterns = [
     path('profile/', users_views.profile, name = 'profile'),
     path('society/', users_views.society, name = 'My Societies'),
     path('blog/', include('blog.urls')),
+    path('', include('blog.urls')),
 ]
 
 if settings.DEBUG:
