@@ -3,35 +3,48 @@
 <html lang="en" dir="ltr">
   <head>
     <!-- Required meta tags -->
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-   <!-- Bootstrap CSS -->
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-   <link rel="stylesheet" href="/static/blog/main.css?{% now "U" %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   <link rel="stylesheet" href="static 'blog/main.css'"/>
 
     <meta charset="utf-8">
     <title>Online Voting</title>
   </head>
   <body>
   <header class="site-header">
-    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-      <div class="container">
-        <a class="navbar-brand mr-4" href="/">Django Blog</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarToggle">
-          <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="/">Home</a>
-            <a class="nav-item nav-link" href="/about">About</a>
-          </div>
-          <!-- Navbar Right Side -->
-          <div class="navbar-nav">
-            <a class="nav-item nav-link" href="#">Login</a>
-            <a class="nav-item nav-link" href="#">Register</a>
-          </div>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">OnlineVoting</a>
         </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="{%url 'blog-home'%}">Home</a></li>
+        </ul>
+        {%if user.is_authenticated %}
+        <ul class="nav navbar-nav">
+          <li><a href="{%url 'profile'%}">Profile</a></li>
+          <li><a href="{%url 'My Societies'%}">My Societies</a></li>
+        </ul>
+        {% else %}
+        <ul class="nav navbar-nav">
+          <li><a href="{%url 'blog-about'%}">About</a></li>
+        </ul>
+        {%endif%}
+        <ul class="nav navbar-nav navbar-right">
+          {% if user.is_authenticated %}
+            <li><a href="{%url 'logout'%}"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
+          {% else %}
+            <li><a href="{%url 'register'%}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <ul class="nav navbar-nav navbar-right">
+            <li><a href="{%url 'login'%}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li></ul>
+          {%endif%}
+        </ul>
       </div>
     </nav>
 </header>
