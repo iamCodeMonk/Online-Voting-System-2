@@ -44,8 +44,9 @@ def profile(request):
 def society(request):
     return render(request, 'users/society.html')
 
-class SocietyDetailView(DetailView):
+class SocietyDetailView(PermissionRequiredMixin,DetailView):
     model = Society
+    permission_required = ('society.can_view', 'society.can_edit')
     template_name = 'users/society_detail.html'
 
 class SocietyCreateView(CreateView):
@@ -56,5 +57,6 @@ class SocietyCreateView(CreateView):
     def form_valid(self,form):
         form.instance.Admin = self.request.user
         super().form_valid(form)
+    
 
 # Create your views here.

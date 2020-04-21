@@ -1,7 +1,8 @@
 from django.db import models
 from  django.contrib.auth.models import User
 from PIL import Image
-
+from django.contrib.auth.models import AbstractUser
+from blog.models import Society
 
 class Profile(models.Model):
     user =  models.OneToOneField(User, on_delete = models.CASCADE)
@@ -18,5 +19,11 @@ class Profile(models.Model):
             output_size = (300,300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+class Member(models.Model):
+    user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key = True)
+    socities = models.ManyToManyField(Society)
+
 
 # Create your models here.
