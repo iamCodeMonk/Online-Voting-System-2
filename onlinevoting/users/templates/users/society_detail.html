@@ -1,12 +1,12 @@
-{%extends "blog/base.html" %}
+{%extends "blog/base_society.html" %}
 {%block content%}
     <article class="media content-section">
     <img class = "rounded-circle article-img"src = "{{ society.Admin.profile.image.url }}">
     <div class="media-body">
       <div class="article-metadata">
-        <h2 class = "article-title">{{ object.Name }}<h2>
-        <small class="text-muted"><br>{{ object.Discription }}</br></small>
-        <small class="text-muted"><br>Admin Name = {{ object.Admin.username }}</br></small>
+        <h2 class = "article-title">{{ society.Name }}<h2>
+        <small class="text-muted"><br>{{ society.Discription }}</br></small>
+        <small class="text-muted"><br>Admin Name = {{ society.Admin.username }}</br></small>
       </div>
     </div>
     </article>
