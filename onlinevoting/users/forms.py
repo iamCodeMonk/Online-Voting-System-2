@@ -33,10 +33,9 @@ class RequestMembershipForm(forms.ModelForm):
         fields = ['username' , 'email', 'id']
 
 class ApproveMembershipForm(forms.ModelForm):
-    approve = forms.BooleanField()
     username = forms.CharField(max_length = 100, disabled = True)
     email = forms.EmailField(disabled = True)
     id = forms.IntegerField(disabled = True)
     class Meta:
         model = User
-        fields = ['username', 'email','id', 'approve']
+        fields = ['username', 'email','id']
