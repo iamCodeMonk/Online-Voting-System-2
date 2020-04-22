@@ -9,6 +9,7 @@ from .decorators import member_login_required
 from blog.models import Society
 from django.contrib.auth.models import User
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm,RequestMembershipForm, ApproveMembershipForm
+from django.urls import reverse_lazy
 
 def register(request):
     if request.method == 'POST':
@@ -100,7 +101,8 @@ class SocietyCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self,form):
         form.instance.Admin = self.request.user
-        super().form_valid(form)
+        return super().form_valid(form)
+    success_url = reverse_lazy('My Societies')
 
 
 class SocietyDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
