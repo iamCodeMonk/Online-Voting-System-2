@@ -8,9 +8,9 @@ class Society(models.Model):
     Admin = models.ForeignKey(User, on_delete = models.CASCADE)
     Pending_List = models.ManyToManyField(User, related_name = 'pending_list')
 
+
     def __str__(self):
         return self.Name
-
 
 
 # Create your models here.

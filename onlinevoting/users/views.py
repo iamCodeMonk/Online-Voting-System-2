@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.views.generic import DetailView,CreateView
+from django.views.generic import DetailView,CreateView,DeleteView
 from django.contrib import messages
 from .decorators import member_login_required
 from blog.models import Society
@@ -93,7 +93,7 @@ def SocietyApprovalView(request,id1,id2):
     else:
         return redirect('My Societies')
 
-class SocietyCreateView(CreateView):
+class SocietyCreateView(LoginRequiredMixin, CreateView):
     model = Society
     template_name = 'users/society_form.html'
     fields = ['Name','Discription']
@@ -103,4 +103,12 @@ class SocietyCreateView(CreateView):
         super().form_valid(form)
 
 
+class SocietyDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
+    model = Society
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == society.Admin:
+            return True
+        return False
 # Create your views here.
