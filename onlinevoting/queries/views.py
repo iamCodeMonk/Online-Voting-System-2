@@ -17,7 +17,7 @@ class PostListView(LoginRequiredMixin,ListView):
 
     def get_queryset(self):
         s_name=get_object_or_404(Society,Name=self.kwargs.get('Name'))
-        return s_name.post_set.all()
+        return s_name.post_set.all().order_by('-date_posted')
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):

@@ -3,12 +3,15 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView,CreateView,DeleteView
 from django.contrib import messages
 from .decorators import member_login_required
 from blog.models import Society
 from django.contrib.auth.models import User
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm,RequestMembershipForm, ApproveMembershipForm
+from django.urls import reverse_lazy
+
 
 def register(request):
     if request.method == 'POST':
@@ -54,14 +57,14 @@ def society(request):
 
 @login_required
 def SocietyAdminView(request,id):
-    if bool(request.user.society_set.get(id = id)):
+    if bool(request.user.society_set.filter(id = id).first()):
         return render(request, 'users/society_admin.html', {'society':Society.objects.get(pk = id)})
     else:
         return redirect('My Societies')
 
 @login_required
 def SocietyDetailView(request,id):
-    if bool(request.user.society_set.get(id = id)):
+    if bool(request.user.society_set.filter(id = id).first()):
         return SocietyAdminView(request,id)
     elif bool(request.user.member.socities.filter(id = id)):
         return render(request, 'users/society_detail.html',{'society':Society.objects.get(pk = id)})
@@ -69,7 +72,8 @@ def SocietyDetailView(request,id):
         if request.method == 'POST':
             form = RequestMembershipForm(request.POST, instance = request.user)
             if form.is_valid():
-                Society.objects.get(pk = id).Pending_List.add(request.POST)
+
+                Society.objects.get(pk = id).Pending_List.add(request.user)
                 messages.success(request, f'Your Request Has been Listed')
                 return redirect('My Societies')
         else:
@@ -101,6 +105,8 @@ class SocietyCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self,form):
         form.instance.Admin = self.request.user
         super().form_valid(form)
+        return super().form_valid(form)
+    success_url = reverse_lazy('My Societies')
 
 
 class SocietyDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
