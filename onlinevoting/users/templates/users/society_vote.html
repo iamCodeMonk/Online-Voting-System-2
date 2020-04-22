@@ -1,0 +1,18 @@
+{%extends "blog/base.html" %}
+{%block content%}
+
+  <h2>
+    Voting For Society {{society.Name}}
+  </h2>
+    {% for participant in society.participant_set.all %}
+    <article class="media content-section">
+    <img class = "rounded-circle article-img"src = "{{ society.Admin.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{%url 'society-confirm-vote' society.id participant.user.id%}">{{ participant.user.username }}</a>
+        <small class="text-muted"><br>{{ participant.Manifesto }}</br></small>
+      </div>
+    </div>
+    </article>
+  {% endfor %}
+{%endblock content%}

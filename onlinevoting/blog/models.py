@@ -7,8 +7,8 @@ class Society(models.Model):
     Discription = models.TextField()
     Admin = models.ForeignKey(User, on_delete = models.CASCADE)
     Pending_List = models.ManyToManyField(User, related_name = 'pending_list')
-
-
+    whoallvoted = models.ManyToManyField(User, related_name = 'Check_vote_once')
+    
     def __str__(self):
         return self.Name
 

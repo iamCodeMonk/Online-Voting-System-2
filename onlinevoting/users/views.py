@@ -4,14 +4,15 @@ from django.contrib.auth.decorators import login_required, permission_required, 
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import DetailView,CreateView,DeleteView
+from django.views.generic import DetailView,CreateView,DeleteView,ListView
 from django.contrib import messages
 from .decorators import member_login_required
 from blog.models import Society
 from django.contrib.auth.models import User
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm,RequestMembershipForm, ApproveMembershipForm
 from django.urls import reverse_lazy
-
+from elections.forms import ApplyForParticipant,VoteCandidate
+from elections.models import Participant
 
 def register(request):
     if request.method == 'POST':
@@ -113,8 +114,54 @@ class SocietyDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
     model = Society
 
     def test_func(self):
-        post = self.get_object()
+        society = self.get_object()
         if self.request.user == society.Admin:
             return True
         return False
 # Create your views here.
+
+
+def ParticipantCreateView(request,id):
+    if bool(request.user.member.socities.filter(id = id)) or bool(request.user.society_set.filter(id = id)):
+        if request.method == 'POST':
+            form = ApplyForParticipant(request.POST)
+            form.instance.user = request.user
+            form.instance.society = Society.objects.filter(id = id).first()
+            if form.is_valid():
+                form.save()
+                messages.success(request, f'Your Request Has been Listed')
+                return redirect('My Societies')
+        form = ApplyForParticipant()
+        return render(request, 'users/society_part.html', {'form':form})
+
+    messages.error(request, f'You Need to be a member to contest in the elections')
+    return redirect('My Societies')
+# searches for <app>/<model>_form.html
+    
+def Vote(request,id):
+    if bool(request.user.member.socities.filter(id = id)) or bool(request.user.society_set.filter(id = id)):
+        return render(request,'users/society_vote.html' ,{'society': Society.objects.filter(id = id).first()})
+
+    messages.error(request, f'You Need to be a member to vote in the elections')
+    return redirect('My Societies')
+
+def ConfirmVote(request,id1,id2):
+    if bool(request.user.member.socities.filter(id = id1)) or bool(request.user.society_set.filter(id = id1)):
+        society = Society.objects.filter(id = id1).first()
+        if not bool(society.whoallvoted.filter(id = id2)):
+            use = User.objects.filter(id = id2).first()
+            participant = use.participant_set.filter(society_id = id1).first()
+            form = VoteCandidate(instance = participant)
+            if request.method == 'POST':
+                user = request.user
+                Participant.objects.filter(id = id2).first().votes += 1
+                society.whoallvoted.add(user)
+                messages.success(request, f'Thank You for Voting!')
+                return redirect('My Societies')
+            return render(request,'users/society_confirm_vote.html' ,{'form': form})
+
+        messages.error(request, f'You Cannot Vote More Than Once')
+        return redirect('My Societies')
+
+    messages.error(request, f'You Need to be a member to vote in the elections')
+    return redirect('My Societies')
