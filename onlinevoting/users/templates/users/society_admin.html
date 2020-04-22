@@ -1,0 +1,19 @@
+{%extends "blog/base.html" %}
+{%block content%}
+
+  <h2>
+    Approve The Pending Lists:
+  </h2>
+    {% for user in society.Pending_List.all %}
+    <article class="media content-section">
+    <img class = "rounded-circle article-img"src = "{{ society.Admin.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{%url 'society_approve' society.id user.id%}">{{ user.username }}</a>
+        <small class="text-muted"><br>{{ user.email }}</br></small>
+        <small class="text-muted"><br>id = {{ user.id }}</br></small>
+      </div>
+    </div>
+    </article>
+    {% endfor %}
+{%endblock content%}

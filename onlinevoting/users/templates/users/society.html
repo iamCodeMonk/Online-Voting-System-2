@@ -1,0 +1,31 @@
+{%extends "blog/base.html" %}
+{%block content%}
+
+  <h1>
+    Find Your Socities Here:
+  </h1>
+    {% for society in user.society_set.all %}
+    <article class="media content-section">
+    <img class = "rounded-circle article-img"src = "{{ society.Admin.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{%url 'society-detail' society.id%}">{{ society.Name }}</a>
+        <small class="text-muted"><br>{{ society.Discription }}</br></small>
+        <small class="text-muted"><br>Admin Name = {{ society.Admin.username }}</br></small>
+      </div>
+    </div>
+    </article>
+  {% endfor %}
+    {% for society in user.member.socities.all %}
+    <article class="media content-section">
+    <img class = "rounded-circle article-img"src = "{{ society.Admin.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{%url 'society-detail' society.id%}">{{ society.Name }}</a>
+        <small class="text-muted"><br>{{ society.Discription }}</br></small>
+        <small class="text-muted"><br>Admin Name = {{ society.Admin.username }}</br></small>
+      </div>
+    </div>
+    </article>
+    {% endfor %}
+{%endblock content%}
