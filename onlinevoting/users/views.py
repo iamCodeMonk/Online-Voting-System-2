@@ -127,7 +127,7 @@ def ParticipantCreateView(request,id):
             form = ApplyForParticipant(request.POST)
             form.instance.user = request.user
             form.instance.society = Society.objects.filter(id = id).first()
-            if form.is_valid():
+            if form.is_valid() and not bool(request.user.participant_set.filter(society_id = id)):
                 form.save()
                 messages.success(request, f'Your Request Has been Listed')
                 return redirect('My Societies')
