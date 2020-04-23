@@ -15,4 +15,4 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('queries-home', kwargs={'pk': self.author.society.pk})
+        return reverse('queries-home', kwargs={'pk': self.society.pk,'Name': self.society.Name})
