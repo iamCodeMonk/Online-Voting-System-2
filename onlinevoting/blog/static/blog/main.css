@@ -3,7 +3,9 @@ body {
   color: #333333;
   margin-top: 5rem;
 }
-
+::-moz-placeholder {
+  opacity: 1;
+}
 h1,
 h2,
 h3,
