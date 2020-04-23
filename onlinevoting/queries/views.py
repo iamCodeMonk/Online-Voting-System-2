@@ -28,4 +28,4 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         # form.instance.society = self.request.society
         return super().form_valid(form)
-    success_url = reverse_lazy('blog-home')
+    # success_url = reverse_lazy('blog-home')
