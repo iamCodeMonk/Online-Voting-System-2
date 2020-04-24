@@ -16,3 +16,4 @@ class VoteCandidate(forms.ModelForm):
     class Meta:
         model = Participant
         fields = ['Name', 'Manifesto']
+

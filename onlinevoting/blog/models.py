@@ -7,10 +7,13 @@ class Society(models.Model):
     Discription = models.TextField()
     Admin = models.ForeignKey(User, on_delete = models.CASCADE)
     Pending_List = models.ManyToManyField(User, related_name = 'pending_list')
-    whoallvoted = models.ManyToManyField(User, related_name = 'Check_vote_once')
+    Participation_on = models.BooleanField()
+    Voting_on = models.BooleanField()
+    Voting_process_on = models.BooleanField()
     
     def __str__(self):
         return self.Name
+
 
 
 # Create your models here.

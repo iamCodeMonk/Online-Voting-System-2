@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
+from .models import Profile, Elections
 from blog.models import Society
 
 class UserRegisterForm(UserCreationForm):
@@ -39,3 +39,9 @@ class ApproveMembershipForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email','id']
+
+
+class ConductElectionsForm(forms.ModelForm):
+    class Meta:
+        model = Elections 
+        fields = ['Name', 'Discription']
