@@ -4,7 +4,11 @@
   <h1>
     Find Your Socities Here:
   </h1>
-    {% for society in user.society_set.all %}
+  <form class="form-inline my-2 my-lg-3">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search for any society here" aria-label="Search" name="search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+    {% for society in societies%}
     <article class="media content-section">
     <img class = "rounded-circle article-img"src = "{{ society.Admin.profile.image.url }}">
     <div class="media-body">
