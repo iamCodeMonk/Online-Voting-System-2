@@ -13,6 +13,7 @@ from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm,RequestMemb
 from django.urls import reverse_lazy
 from elections.forms import ApplyForParticipant,VoteCandidate
 from elections.models import Participant
+from .models import Profile
 
 def register(request):
     if request.method == 'POST':
@@ -46,15 +47,46 @@ def profile(request):
     }
     return render(request, 'users/profile.html', context)
 
+# @login_required
+# def society(request):
+#     return render(request, 'users/society.html')
 @login_required
 def society(request):
-    return render(request, 'users/society.html')
+    search_name = ''
+    societies= request.user.society_set.all()
+    total_societies= Society.objects.all()
+    res=[]
+    if 'search' in request.GET:
+        search_name = request.GET['search']
+        for society in total_societies:
+            if search_name in society.Name:
+                res.insert(0,society)
+            societies=res
+        context = {
+            'societies' : societies,
+            'search_name' : search_name
+        }
+        return render(request, 'users/search_society.html',context)
+    context = {
+        'societies' : societies,
+        'search_name' : search_name
+    }
+    return render(request, 'users/society.html',context)
 
-
-# class SocietyDetailView(PermissionRequiredMixin,DetailView):
-#     model = Society
-#     permission_required = ('society.can_view', 'society.can_edit')
-#     template_name = 'users/society_detail.html'
+# @login_required
+# def searchsociety(request):
+#     search_name = ''
+#     total_societies= Society.objects.all()
+#     societies=[]
+#     if 'search' in request.GET:
+#         search_name = request.GET['search']
+#         for society in total_societies:
+#             if search_name in society.Name:
+#                 societies.insert(0,society)
+#     context = {
+#         'societies': societies,
+#     }
+#     return render(request, 'users/search_society.html',context)
 
 @login_required
 def ResultsView(request, id):
@@ -177,6 +209,7 @@ class SocietyDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
         if self.request.user == society.Admin:
             return True
         return False
+    success_url = reverse_lazy('My Societies')
 # Create your views here.
 
 

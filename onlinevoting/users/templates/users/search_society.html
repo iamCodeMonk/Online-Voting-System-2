@@ -1,0 +1,20 @@
+{%extends "blog/base.html" %}
+{%block content%}
+    <h1>Search Results:</h1>
+    <form class="form-inline my-2 my-lg-3">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    {% for society in societies %}
+    <article class="media content-section">
+    <img class = "rounded-circle article-img"src = "{{ society.Admin.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{%url 'society-detail' society.id%}">{{ society.Name }}</a>
+        <small class="text-muted"><br>{{ society.Discription }}</br></small>
+        <small class="text-muted"><br>Admin Name = {{ society.Admin.username }}</br></small>
+      </div>
+    </div>
+    </article>
+  {% endfor %}
+{%endblock content%}
