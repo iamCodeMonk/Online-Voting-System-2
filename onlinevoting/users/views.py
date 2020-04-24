@@ -150,6 +150,7 @@ class SocietyDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
         if self.request.user == society.Admin:
             return True
         return False
+    success_url = reverse_lazy('My Societies')
 # Create your views here.
 
 
