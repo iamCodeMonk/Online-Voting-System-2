@@ -1,0 +1,26 @@
+{%extends "blog/base.html" %}
+{%block content%}
+
+  <h1>
+    Find The Results for Society {{society.Name}} Here:
+  </h1>
+    {% for elections in society.elections_set.all reversed %}
+    <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2">{{ elections.Name }}</a>
+        <small class="text-muted">{{ elections.Discription }}</small>
+        {%for participant in elections.participant_set.all %}
+        <article class="media content-section">
+        <div class="media-body">
+        <div class="article-metadata">
+        <a class="mr-2">{{ participant.Name }}</a>
+        <small class="text-muted">{{ participant.Discription }}</small>
+        <small class="text-muted">{{ participant.votes }}</small>
+        </div>
+        </div>
+    </article>
+    {%endfor%}
+    </article>
+  {% endfor %}
+{%endblock content%}

@@ -17,4 +17,17 @@
     </div>
     </article>
     {% endfor %}
+    {%if society.Voting_process_on == False %}
+    <div class="form-group">
+      <button class = "btn btn-outline-info" type = "submit" ><a href = "{%url 'society_conduct_elections' society.id %}">Conduct Elections</a></button>
+    </div>
+    {% elif society.Participation_on == True %}
+    <div class="form-group">
+      <button class = "btn btn-outline-info" type = "submit"><a href = "{%url 'society_conduct_elections' society.id %}">Start Voting Process</a></button>
+    </div>
+    {%else%}
+    <div class="form-group">
+      <button class = "btn btn-outline-info" type = "submit"><a href = "{%url 'society_conduct_elections' society.id %}">End Elections</a></button>
+    </div>
+    {%endif%}
 {%endblock content%}
