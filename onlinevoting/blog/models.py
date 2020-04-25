@@ -14,6 +14,7 @@ class Society(models.Model):
     def __str__(self):
         return self.Name
 
-
+    def get_absolute_url(self):
+        return reverse('society-detail', kwargs={'id': self.society.pk})
 
 # Create your models here.
