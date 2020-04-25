@@ -16,8 +16,8 @@
 
 <body>
     <header class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-            <div class="container">
+        <nav class="navbar navbar-inverse navbar-dark bg-steel fixed-top">
+            <div class="container-fluid">
                 <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Online Voting System</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
                     aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,9 +60,17 @@
             <div class="col-md-4">
                 <!-- <div class="content-section"> -->
                     <ul class="list-group">
+                        {%if society.Participation_on %}
+                        <li class="list-group-item list-group-item-light"><a class="mr-2" href=" {%url 'society-participant' society.id%}" >Participate in Upcoming Elections</a></li>
+
+                        {% elif society.Voting_on %}
+                        <li class="list-group-item list-group-item-light"><a class="mr-2" href="{% url 'society-vote' society.id%}" >Cast Vote</a></li>
+
+                        {%else%}
                         <li class="list-group-item list-group-item-light"><a class="mr-2" href="#" >Latest Information</a></li>
+                        {% endif %}
                         <li class="list-group-item list-group-item-light"><a class="mr-2" href="{% url 'queries-home' society.id society.Name %}">Communication Channel</a></li>
-                        <li class="list-group-item list-group-item-light"><a class="mr-2" href="#" >Results</a></li>
+                        <li class="list-group-item list-group-item-light"><a class="mr-2" href=" {%url 'society-results' society.id%} " >Results</a></li>
                     </ul>
                 <!-- </div> -->
             </div>

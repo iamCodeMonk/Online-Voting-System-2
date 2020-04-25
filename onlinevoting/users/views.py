@@ -110,7 +110,7 @@ def ConductElections(request, id):
                     form.save()
                     society.save()
                     messages.success(request, f'The Election has now been Listed')
-                    return redirect('My Societies')
+                    return redirect('society-detail', id)
             form = ConductElectionsForm()
             return render(request, 'users/society_conduct_vote.html',{'form':form})
 
@@ -122,7 +122,7 @@ def ConductElections(request, id):
                     society.Participation_on = False
                     society.save()
                     messages.success(request, f'The Voting Phase has now begun')
-                    return redirect('My Societies')
+                    return redirect('society-detail', id)
 
             form = ConductElectionsForm(instance = society.elections_set.last())
             return render(request, 'users/society_conduct_vote.html',{'form':form}) 
@@ -135,7 +135,7 @@ def ConductElections(request, id):
                     society.Voting_on = False
                     society.save()
                     messages.success(request, f'Elections End Now')
-                    return redirect('My Societies')
+                    return redirect('society-detail', id)
 
             form = ConductElectionsForm(instance = society.elections_set.last())
             return render(request, 'users/society_conduct_vote.html',{'form':form})
@@ -153,7 +153,7 @@ def SocietyAdminView(request,id):
 
 @login_required
 def SocietyDetailView(request,id):
-    if bool(request.user.society_set.filter(id = id).first()):
+    if bool(request.user.society_set.filter(id = id)):
         return SocietyAdminView(request,id)
     elif bool(request.user.member.socities.filter(id = id)):
         return render(request, 'users/society_detail.html',{'society':Society.objects.get(pk = id)})
@@ -180,7 +180,7 @@ def SocietyApprovalView(request,id1,id2):
                 user = User.objects.get(id = id2)
                 user.member.socities.add(Society.objects.get(pk = id1))
                 society.Pending_List.remove(user)
-                return redirect('My Societies')
+                return redirect('society-detail', id1)
         form = ApproveMembershipForm(instance = user)
         return render(request, 'users/society_approve.html', {'form':form})
     else:
@@ -225,15 +225,15 @@ def ParticipantCreateView(request,id):
                 if form.is_valid() and not bool(society.elections_set.last().participant_set.filter(user_id = request.user.id)):
                     form.save()
                     messages.success(request, f'Your Request Has been Listed')
-                    return redirect('My Societies')
+                    return redirect('society-detail', id)
             form = ApplyForParticipant()
             return render(request, 'users/society_part.html', {'form':form})
 
         messages.info(request, f'Participation Phase is not active Now')        
-        return redirect('My Societies')
+        return redirect('society-detail', id)
 
     messages.error(request, f'You Need to be a member to contest in the elections')
-    return redirect('My Societies')
+    return redirect('society-detail', id)
 # searches for <app>/<model>_form.html
     
 def Vote(request,id):
@@ -242,7 +242,7 @@ def Vote(request,id):
             return render(request,'users/society_vote.html' ,{'society': Society.objects.filter(id = id).first()})
 
         messages.info(request, f'Voting Phase is not active Now')        
-        return redirect('My Societies')
+        return redirect('society-detail', id)
 
     messages.error(request, f'You Need to be a member to vote in the elections')
     return redirect('My Societies')
@@ -260,11 +260,11 @@ def ConfirmVote(request,id1,id2):
                 participant.save()
                 society.elections_set.last().whoallvoted.add(user)
                 messages.success(request, f'Thank You for Voting!')
-                return redirect('My Societies')
+                return redirect('society-detail', id1)
             return render(request,'users/society_confirm_vote.html' ,{'form': form})
 
         messages.error(request, f'You Cannot Vote More Than Once')
-        return redirect('My Societies')
+        return redirect('society-detail', id1)
 
     messages.error(request, f'You Need to be a member to vote in the elections')
     return redirect('My Societies')
