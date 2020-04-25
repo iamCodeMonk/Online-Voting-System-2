@@ -32,6 +32,7 @@
                     <div class="navbar-nav">
                         {% if user.is_authenticated %}
                         <a class="nav-item nav-link" href="{%url 'society_create'%}">Add Society</a>
+                        <a class="nav-item nav-link" href="{% url 'new-query' society.id society.Name %}">Announce</a>
                         <a class="nav-item nav-link" href="{%url 'profile'%}">Profile</a>
                         <a class="nav-item nav-link" href="{%url 'My Societies'%}">My Societies</a>
                         <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
@@ -58,9 +59,17 @@
             <div class="col-md-4">
                 <!-- <div class="content-section"> -->
                     <ul class="list-group">
+                        {%if society.Participation_on %}
+                        <li class="list-group-item list-group-item-light"><a class="mr-2" href=" {%url 'society-participant' society.id%}" >Participate in Upcoming Elections</a></li>
+
+                        {% elif society.Voting_on %}
+                        <li class="list-group-item list-group-item-light"><a class="mr-2" href="{% url 'society-vote' society.id%}" >Cast Vote</a></li>
+
+                        {%else%}
                         <li class="list-group-item list-group-item-light"><a class="mr-2" href="#" >Latest Information</a></li>
-                        <li class="list-group-item list-group-item-light"><a class="mr-2" href="{% url 'queries-home' society.id society.Name %}">Have queries?</a></li>
-                        <li class="list-group-item list-group-item-light"><a class="mr-2" href="#" >Results</a></li>
+                        {% endif %}
+                        <li class="list-group-item list-group-item-light"><a class="mr-2" href="{% url 'queries-home' society.id society.Name %}">Communication Channel</a></li>
+                        <li class="list-group-item list-group-item-light"><a class="mr-2" href=" {%url 'society-results' society.id%} " >Results</a></li>
                     </ul>
                 <!-- </div> -->
             </div>
