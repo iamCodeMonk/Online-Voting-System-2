@@ -16,16 +16,16 @@ class PostListView(LoginRequiredMixin,ListView):
     paginate_by=5
 
     def get_queryset(self):
-        s_name=get_object_or_404(Society,Name=self.kwargs.get('Name'))
+        s_name=get_object_or_404(Society,id=self.kwargs.get('pk'))
         return s_name.post_set.all().order_by('-date_posted')
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model=Post
-    fields = ['title', 'content','society']
+    fields = ['title', 'content']
 # searches for <app>/<model>_form.html
     def form_valid(self,form):
         form.instance.author = self.request.user
-        # form.instance.society = self.request.society
+        form.instance.society_id = self.kwargs.get('pk')
         return super().form_valid(form)
     # success_url = reverse_lazy('blog-home')
